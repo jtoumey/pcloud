@@ -1,6 +1,6 @@
 #include <iostream>
-#include <cstdlib>
 #include <ctime>
+#include <cstdlib>
 
 struct PointList
 {
@@ -38,18 +38,20 @@ PointCloud::PointCloud() {
 
 }
 
-PointCloud::PointCloud(int num_pts, int xmax, int ymax)
+PointCloud::PointCloud(int num_pts, int _xmax, int _ymax)
 {
 
     xmin = 0;
     ymin = 0;
+    xmax = _xmax;
+    ymax = _ymax;
 
     points.npts = num_pts;
     points.mid_pt = num_pts/2;
     points.xpts = new int[num_pts];
     points.ypts = new int[num_pts];
 
-    debug = 1;
+    debug = 0;
 }
 
 void PointCloud::generatePointCloud()
@@ -62,16 +64,13 @@ void PointCloud::generatePointCloud()
     if(debug == 0)
     {
         int rnx, rny;
-        int ii;
 
         srand(time(NULL));
 
-        for(ii = 0; ii < num_pts; ii++)
+        for(int ii = 0; ii < points.npts; ++ii)
         { 
             rnx = rand() % (xmax + 1);
             rny = rand() % (ymax + 1);
-
-            std::cout << rnx << ",   " << rny << std::endl;
 
             points.xpts[ii] = rnx;
             points.ypts[ii] = rny;
@@ -180,12 +179,13 @@ class Node
 
 };
 
-Node::Node(int level, PointList* ptlst)
+Node::Node(int _level, PointList* ptlst)
 {
 
     xc = ptlst->xpts[ptlst->mid_pt];
     yc = ptlst->ypts[ptlst->mid_pt];
 
+    level = _level;
     child_side = -1;
     dim = 2;
 
